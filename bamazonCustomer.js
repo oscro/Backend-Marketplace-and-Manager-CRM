@@ -19,7 +19,6 @@ connection.connect(function(err) {
 
 
 function start() {
-  //Show list of products available
   inquirer
     .prompt({
       name: "buyItem",
