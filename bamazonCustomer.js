@@ -49,7 +49,7 @@ function showProducts() {
   
       console.log("ID || Product Name || Department || Price || Stock");
       for (var i = 0; i < res.length; i++) {
-        console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+        console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$" + res[i].price + ".00 | " + res[i].stock_quantity);
       };
     });
     //console.log("THIS IS QUERY SQL " + query.sql);
