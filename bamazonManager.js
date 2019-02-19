@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-
+var { table } = require("table");
 
 
 var connection = mysql.createConnection({
@@ -29,7 +29,7 @@ function start() {
         switch (answer.menu) {
             case "View Products for Sale":
               viewProducts();
-              setTimeout(start, 1000);
+              setTimeout(start, 500);
               break;
       
             case "View Low Inventory":
@@ -52,35 +52,40 @@ function start() {
     });
 };
 
-function viewProducts(){
+var viewProducts = function () {
 
-    connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function(err, res){
-        if (err) throw err; 
-  
-        console.log("\n\nID || Product Name || Department || Price || Stock");
-        for (var i = 0; i < res.length; i++) {
-          console.log(res[i].item_id + " | " + res[i].product_name + " | " + "$" + res[i].price + ".00 | " + res[i].stock_quantity);
-        };
+  connection.query("SELECT * FROM products", function(err, res) {
+    if (err) throw err;
+    var info = [["ID", "Item Name", "Department", "Price", "Stock"]];
+    res.forEach(function(pro) {
+        info.push([pro.item_id, pro.product_name, pro.department_name, "$" + pro.price, pro.stock_quantity])
     });
+    var display = table(info);
+    console.log(display);
+  });  
 };
 
 function viewLowInventory(){
 
-    connection.query("SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity <= 5", function(err, res){
-        if (err) throw err; 
-  
-        console.log("ID || Product Name || Department || Price || Stock");
-        for (var i = 0; i < res.length; i++) {
-          console.log(res[i].item_id + " | " + res[i].product_name + " | " + "$" + res[i].price + ".00 | " + res[i].stock_quantity);
-        };
+  connection.query("SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity <= 5", function(err, res) {
+    if (err) throw err;
+    var info = [["ID", "Item Name", "Department", "Price", "Stock"]];
+    res.forEach(function(pro) {
+        info.push([pro.item_id, pro.product_name, pro.department_name, "$" + pro.price, pro.stock_quantity])
     });
+    var display = table(info);
+    console.log(display);
+  }); 
 
-    setTimeout(start, 1000);
+    setTimeout(start, 500);
 
 };
 
 function addToInventory(){
+
     viewProducts();
+
+    setTimeout(function(){ 
     inquirer.prompt([
         {
         name: "itemId",
@@ -111,11 +116,11 @@ function addToInventory(){
             if (err) throw err; 
             console.log("\nAmount Successfully Added!");
             viewProducts();
-            setTimeout(start, 1000);
+            setTimeout(start, 500);
         });
         
     });
-
+  }, 500);
 };
 
 function addNewProduct(){

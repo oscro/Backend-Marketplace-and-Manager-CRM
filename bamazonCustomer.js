@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var { table } = require("table");
 var total = 0;
-
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -11,29 +11,39 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
-// connect to the mysql server and sql database
 connection.connect(function(err) {
   if (err) throw err;
   start();
 });
 
-
+var showProducts = function() {
+  connection.query("SELECT * FROM products", function(err, res) {
+      if (err) throw err;
+      var info = [["ID", "Item Name", "Department", "Price", "Stock"]];
+      res.forEach(function(pro) {
+          info.push([pro.item_id, pro.product_name, pro.department_name, "$" + pro.price, pro.stock_quantity])
+      });
+      var display = table(info);
+      console.log(display);
+  });
+};
 
 function start() {
-
+  showProducts();
+  setTimeout(function(){
   inquirer
     .prompt({
       name: "start",
       type: "list",
       message: "Would you like to buy an item?",
-      choices: ["Yes! Show me the goods!", "No, Thank You!"]
+      choices: ["Yes, I would love to buy some products!", "No, Thank You!"]
     })
     .then(function(answer) {
       
-      if (answer.start === "Yes! Show me the goods!") {
+      if (answer.start === "Yes, I would love to buy some products!") {
 
-         showProducts();
-         setTimeout(buyProducts, 1000);
+         
+         setTimeout(buyProducts, 500);
         
       }
       else if(answer.start === "No, Thank You!") {
@@ -41,19 +51,8 @@ function start() {
         connection.end();
       }
     });
-}
-
-function showProducts() {
-    connection.query("SELECT * FROM products", function(err, res) {
-      if (err) throw err; 
-  
-      console.log("ID || Product Name || Department || Price || Stock");
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$" + res[i].price + ".00 | " + res[i].stock_quantity);
-      };
-    });
-    //console.log("THIS IS QUERY SQL " + query.sql);
-  };
+  }, 1000);
+};
 
 function buyProducts(){
   
@@ -131,4 +130,16 @@ function calcUserOrder (purchaseQuantity, itemId) {
 
 function calcTotal (amountPurchased, cost) {
   total += amountPurchased * cost; 
-}
+};
+
+// function showProducts() {
+//     connection.query("SELECT * FROM products", function(err, res) {
+//       if (err) throw err; 
+  
+//       console.log("ID || Product Name || Department || Price || Stock");
+//       for (var i = 0; i < res.length; i++) {
+//         console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$" + res[i].price + ".00 | " + res[i].stock_quantity);
+//       };
+//     });
+//     //console.log("THIS IS QUERY SQL " + query.sql);
+//   };
