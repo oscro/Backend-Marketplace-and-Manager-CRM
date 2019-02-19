@@ -18,6 +18,14 @@ pull and populate information.
    * price (cost to customer)
 
    * stock_quantity (how much of the product is available in stores)
+   
+* The customer can enter the store front and view from the available products in the database.
+
+* The customer can purchase a product and the app will total the price of the customer's cart and deduct from the quantity in the database.
+
+* If the customer is requesting an amount of the product that is above inventory levels, the app will decline the purchase and state there are insufficient quantities. 
+
+- - -
 
 ### Bamazon Manager View
 
