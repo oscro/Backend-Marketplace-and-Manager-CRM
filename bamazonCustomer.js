@@ -44,7 +44,7 @@ function start() {
 }
 
 function showProducts() {
-    var query = connection.query("SELECT * FROM products", function(err, res) {
+    connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err; 
   
       console.log("ID || Product Name || Department || Price || Stock");
@@ -88,18 +88,24 @@ function buyProducts(){
 }
 
 function calcUserOrder (purchaseQuantity, itemId) {
+
+  connection.query("SELECT stock_quantity FROM products WHERE item_id = ?;", [itemId], function(err, res){
+
+  if (parseInt(res[0].stock_quantity) >= parseInt(purchaseQuantity)){
   
-  var query = connection.query("UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?;", [purchaseQuantity, itemId], function(err, res) {
+  connection.query("UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?;", [purchaseQuantity, itemId], function(err, res) {
     if (err) throw err; 
-    // console.log("The updated inventory: ")
-    // showProducts();
-    // setTimeout(start, 2000);
   });
 
   connection.query("SELECT price FROM products WHERE item_id = ?;", [itemId], function(err, res){
     calcTotal(parseInt(purchaseQuantity), parseInt(res[0].price))
     console.log("Total: " + "$" + total + ".00");
 
+  });
+
+  } else {
+    console.log("Sorry We don't have enough stock to fulfill your order. Please order a lesser amount.");
+  };
   });
 
   inquirer
