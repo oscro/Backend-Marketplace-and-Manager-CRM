@@ -1,9 +1,9 @@
 ## Overview
-An Amazon-like storefront that will take in orders from customers and deplete stock from the store's inventory. The app has a manager view in which it 
+A CLI storefront that will take in orders from customers and deplete stock from the store's inventory. The app has a manager view in which it 
 allows the manager to view inventory, view low inventory < 5, add to inventory, and add a new product. Both applications connect to a MySQL database to 
 pull and populate information.
 
-### Bamazon Customer View 
+### Customer View 
 
 * The products table has each of the following columns:
 
@@ -25,7 +25,7 @@ pull and populate information.
 
 - - -
 
-### Bamazon Manager View
+### Manager View
 
 * List of menu options:
 
