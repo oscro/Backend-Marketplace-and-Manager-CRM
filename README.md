@@ -1,5 +1,3 @@
-# Bamazon - Node.js & MySQL
-
 ## Overview
 An Amazon-like storefront that will take in orders from customers and deplete stock from the store's inventory. The app has a manager view in which it 
 allows the manager to view inventory, view low inventory < 5, add to inventory, and add a new product. Both applications connect to a MySQL database to 
